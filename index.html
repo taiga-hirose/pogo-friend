@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ポケモンGO フレンド募集掲示板｜近くのトレーナーと距離でつながる</title>
+<meta name="description" content="ポケモンGOのフレンドコードを交換できる無料掲示板。あなたとの距離の目安を自動表示。日本語・English・中文・한국어に対応。X(Twitter)でシェアも簡単。">
+<link rel="canonical" href="https://choi-kiki.com/tools/pogo-friend/">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8831222505157374" crossorigin="anonymous"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap');
+
+  :root{
+    --paper:#F3EDE1; --paper-2:#EAE1D0; --card:#FCF9F2;
+    --ink:#2A2521; --ink-soft:#6B6156; --muted:#9C9081; --line:#DED3C0;
+    --terra:#B85434; --terra-soft:#D98060; --sage:#7C8A54; --gold:#C99A3F;
+    --mystic:#2F6FD6; --valor:#D9412B; --instinct:#E0AE1C;
+    --shadow:0 1px 2px rgba(42,37,33,.06), 0 8px 24px rgba(42,37,33,.06);
+    --radius:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:"Noto Sans JP",system-ui,sans-serif;background:var(--paper);color:var(--ink);
+    line-height:1.7;font-size:15px;-webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(rgba(184,84,52,.035) 1px, transparent 1px);background-size:22px 22px;
+  }
+  .wrap{max-width:600px;margin:0 auto;padding:0 16px 64px}
+  button,input,select,textarea{font:inherit;color:inherit}
+  button{cursor:pointer}
+
+  /* Header */
+  header{padding:26px 0 16px;text-align:center;position:relative}
+  .lang{position:absolute;top:14px;right:0}
+  .lang select{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:3px 6px;font-size:12px}
+  .eyebrow{font-size:11px;letter-spacing:.22em;color:var(--terra);font-weight:700;text-transform:uppercase;margin:14px 0 8px}
+  h1{font-family:"Shippori Mincho",serif;font-weight:700;font-size:26px;line-height:1.32}
+  .sub{margin-top:8px;color:var(--ink-soft);font-size:13px}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-bottom:14px}
+  .card h2{font-size:14px;font-weight:700;margin-bottom:8px}
+  .muted{color:var(--muted);font-size:12px}
+
+  /* My area */
+  .area-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .area-now{font-weight:700;font-size:15px;flex:1 1 100%}
+  .area-now .pin{color:var(--terra)}
+  .btn{border:1px solid var(--line);background:var(--paper);border-radius:10px;padding:7px 12px;font-size:13px;font-weight:700}
+  .btn:hover{background:var(--paper-2)}
+  .btn.primary{background:var(--terra);border-color:var(--terra);color:#fff}
+  .btn.primary:hover{background:#a3492c}
+  .btn.danger{color:var(--valor)}
+  .btn:disabled{opacity:.5;cursor:default}
+  select.input,input.input,textarea.input{
+    width:100%;border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 10px;font-size:14px
+  }
+  .area-row select.input{flex:1 1 200px;width:auto}
+
+  /* Tabs */
+  .tabs{display:flex;gap:4px;background:var(--paper-2);border:1px solid var(--line);border-radius:12px;padding:4px;margin:4px 0 14px}
+  .tabs button{flex:1;border:0;background:transparent;border-radius:9px;padding:8px 4px;font-size:13px;font-weight:700;color:var(--ink-soft)}
+  .tabs button[aria-selected="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+
+  /* Filters */
+  .filters{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:12px}
+  .chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:4px 11px;font-size:12px;font-weight:700;color:var(--ink-soft)}
+  .chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+  .filters .sort{margin-left:auto}
+
+  /* Post cards */
+  .post{display:flex;gap:12px;align-items:flex-start}
+  .avatar{flex:0 0 64px;width:64px;height:64px;border-radius:50%;background:var(--paper-2);border:3px solid var(--line);overflow:hidden;display:grid;place-items:center}
+  .avatar img{width:100%;height:100%;object-fit:contain;transform:scale(1.35)}
+  .avatar.mystic{border-color:var(--mystic)} .avatar.valor{border-color:var(--valor)} .avatar.instinct{border-color:var(--instinct)}
+  .ball{width:60%;height:60%;border-radius:50%;background:linear-gradient(var(--valor) 0 46%, var(--ink) 46% 54%, #fff 54%);border:2px solid var(--ink)}
+  .post-body{flex:1;min-width:0}
+  .post-head{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+  .post-name{font-weight:700;font-size:16px;overflow-wrap:anywhere}
+  .lv{font-size:12px;font-weight:700;color:var(--ink-soft)}
+  .team{font-size:11px;font-weight:700;border-radius:6px;padding:0 6px;color:#fff}
+  .team.mystic{background:var(--mystic)} .team.valor{background:var(--valor)} .team.instinct{background:var(--instinct);color:var(--ink)}
+  .meta{font-size:12px;color:var(--ink-soft);margin-top:2px}
+  .dist{color:var(--terra);font-weight:700}
+  .tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+  .tag{font-size:11px;background:var(--paper-2);border-radius:6px;padding:1px 7px;color:var(--ink-soft)}
+  .msg{margin-top:6px;font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere}
+  .code-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:10px}
+  .code{font-family:ui-monospace,Menlo,Consolas,monospace;font-weight:700;font-size:16px;letter-spacing:.06em;background:var(--paper);border:1px dashed var(--line);border-radius:8px;padding:3px 10px}
+  .btn.x{background:#000;border-color:#000;color:#fff}
+  .badge{font-size:11px;font-weight:700;border-radius:6px;padding:1px 8px}
+  .badge.on{background:#E3EBD3;color:#4E5A2C} .badge.off{background:#EEE6DA;color:var(--muted)}
+
+  /* Form */
+  .field{margin-bottom:14px}
+  .field > label,.field > .label{display:block;font-size:13px;font-weight:700;margin-bottom:5px}
+  .req{color:var(--terra);margin-left:4px}
+  .radios{display:flex;flex-wrap:wrap;gap:6px}
+  .radios label{display:flex;align-items:center;gap:4px;border:1px solid var(--line);background:#fff;border-radius:10px;padding:5px 10px;font-size:13px;cursor:pointer}
+  .radios input{accent-color:var(--terra)}
+  .icon-pick{display:flex;gap:12px;align-items:center}
+  .counter{text-align:right;font-size:11px;color:var(--muted)}
+  .notice{border-radius:10px;padding:10px 12px;font-size:13px;margin-bottom:12px}
+  .notice.err{background:#FBE6E1;color:#8A2E1A}
+  .notice.ok{background:#E3EBD3;color:#3F4A22}
+
+  /* Icon dialog */
+  dialog{border:0;border-radius:var(--radius);padding:0;width:min(560px,calc(100vw - 32px));max-height:min(80vh,640px);background:var(--card);color:var(--ink);box-shadow:0 20px 60px rgba(0,0,0,.25)}
+  dialog::backdrop{background:rgba(42,37,33,.45)}
+  .dlg-head{position:sticky;top:0;background:var(--card);padding:14px 14px 10px;border-bottom:1px solid var(--line);display:flex;gap:8px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:6px;padding:12px 14px 16px;overflow:auto}
+  .grid button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:4px 2px 6px;font-size:11px;line-height:1.3;display:flex;flex-direction:column;align-items:center}
+  .grid button:hover{border-color:var(--terra)}
+  .grid img{width:64px;height:64px;object-fit:contain}
+  .grid .no{color:var(--muted);font-size:10px}
+
+  footer{text-align:center;padding-top:20px;color:var(--muted);font-size:11px;line-height:1.8}
+  footer a{color:var(--sage);text-decoration:none;font-weight:700}
+  [hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="lang">
+      <select id="lang" aria-label="Language">
+        <option value="ja">日本語</option>
+        <option value="en">English</option>
+        <option value="zh-CN">简体中文</option>
+        <option value="zh-TW">繁體中文</option>
+        <option value="ko">한국어</option>
+      </select>
+    </div>
+    <div class="eyebrow">Pokémon GO Friends</div>
+    <h1 data-i18n="title"></h1>
+    <p class="sub" data-i18n="sub"></p>
+  </header>
+
+  <!-- 自分の地域 -->
+  <section class="card">
+    <h2 data-i18n="myArea"></h2>
+    <div class="area-row">
+      <div class="area-now"><span class="pin">📍</span> <span id="area-label"></span></div>
+      <button class="btn" id="btn-gps" type="button" data-i18n="useGps"></button>
+      <select class="input" id="area-select" aria-label="Region"></select>
+    </div>
+    <p class="muted" style="margin-top:8px" data-i18n="areaHint"></p>
+  </section>
+
+  <div class="tabs" role="tablist">
+    <button role="tab" data-tab="board" aria-selected="true" data-i18n="tabBoard"></button>
+    <button role="tab" data-tab="post" aria-selected="false" data-i18n="tabPost"></button>
+    <button role="tab" data-tab="mine" aria-selected="false" data-i18n="tabMine"></button>
+  </div>
+
+  <!-- 掲示板 -->
+  <section id="panel-board">
+    <div class="filters" id="filters"></div>
+    <div id="board-status" class="muted" style="text-align:center;padding:16px"></div>
+    <div id="board-list"></div>
+  </section>
+
+  <!-- 投稿 -->
+  <section id="panel-post" hidden>
+    <form class="card" id="post-form" novalidate>
+      <div id="form-notice" class="notice" hidden></div>
+
+      <div class="field">
+        <label for="f-name"><span data-i18n="formName"></span><span class="req">*</span></label>
+        <input class="input" id="f-name" maxlength="20" autocomplete="nickname" required>
+      </div>
+      <div class="field">
+        <label for="f-code"><span data-i18n="formCode"></span><span class="req">*</span></label>
+        <input class="input" id="f-code" inputmode="numeric" maxlength="14" placeholder="1234 5678 9012" required>
+      </div>
+      <div class="field">
+        <span class="label" data-i18n="formIcon"></span>
+        <div class="icon-pick">
+          <div class="avatar" id="f-icon-preview"></div>
+          <div>
+            <div id="f-icon-name" class="muted"></div>
+            <button class="btn" type="button" id="btn-icon" data-i18n="chooseIcon"></button>
+            <button class="btn" type="button" id="btn-icon-clear" data-i18n="iconNone" hidden></button>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <span class="label" data-i18n="formTeam"></span>
+        <div class="radios" id="f-team"></div>
+      </div>
+      <div class="field">
+        <label for="f-level" data-i18n="formLevel"></label>
+        <input class="input" id="f-level" type="number" min="1" max="80" inputmode="numeric" style="max-width:120px">
+      </div>
+      <div class="field">
+        <span class="label" data-i18n="formPurpose"></span>
+        <div class="radios" id="f-purpose"></div>
+      </div>
+      <div class="field">
+        <label for="f-msg" data-i18n="formMsg"></label>
+        <textarea class="input" id="f-msg" rows="3" maxlength="200"></textarea>
+        <div class="counter"><span id="f-msg-count">0</span>/200</div>
+      </div>
+      <div class="field">
+        <span class="label"><span data-i18n="formArea"></span><span class="req">*</span></span>
+        <div id="f-area" class="muted"></div>
+      </div>
+      <button class="btn primary" type="submit" id="btn-submit" style="width:100%;padding:11px"></button>
+      <button class="btn" type="button" id="btn-cancel-edit" style="width:100%;margin-top:8px" data-i18n="cancel" hidden></button>
+    </form>
+  </section>
+
+  <!-- マイ投稿 -->
+  <section id="panel-mine" hidden>
+    <div id="mine-notice" class="notice" hidden></div>
+    <div id="mine-body"></div>
+  </section>
+
+  <footer>
+    <p data-i18n="disclaimer"></p>
+    <div style="margin:12px 0 8px">
+      <a href="https://choi-kiki.com/privacy" data-i18n="privacy"></a>
+      <span style="opacity:.5">｜</span>
+      <a href="https://choi-kiki.com/contact" data-i18n="contact"></a>
+      <span style="opacity:.5">｜</span>
+      <a href="https://choi-kiki.com/blog/nanikano/">なにかのBlog</a>
+    </div>
+    <span style="opacity:.7">© Choi-Kiki</span>
+  </footer>
+</div>
+
+<dialog id="icon-dlg">
+  <div class="dlg-head">
+    <input class="input" id="icon-q" type="search" autocomplete="off">
+    <button class="btn" type="button" id="icon-close" data-i18n="close"></button>
+  </div>
+  <div class="grid" id="icon-grid"></div>
+</dialog>
+
+<script>
+'use strict';
+const API = '/api/pogo/posts';
+const PAGE_URL = 'https://choi-kiki.com/tools/pogo-friend/';
+const LEVEL_MAX = 80;
+const SPRITE = id => `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
+const ARTWORK = id => `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
+
+/* ===================== 多言語辞書 ===================== */
+const I18N = {
+  ja: {
+    title: 'ポケモンGO フレンド募集掲示板',
+    sub: 'フレンドコードを交換しよう。あなたとの距離の目安を自動で表示します。',
+    myArea: 'あなたの地域', useGps: '現在地を使う', notSet: '未設定', selectArea: '— 地域を選択 —',
+    japan: '日本', world: '海外',
+    areaHint: '距離の計算と投稿に使います。現在地は約10km単位に丸めて保存され、正確な位置は公開されません。',
+    gpsFail: '現在地を取得できませんでした。リストから選択してください。', gpsBusy: '取得中…',
+    tabBoard: '掲示板', tabPost: '投稿する', tabMine: 'マイ投稿',
+    all: 'すべて', sortNew: '新着順', sortNear: '近い順',
+    loading: '読み込み中…', loadFail: '読み込みに失敗しました。', empty: 'まだ投稿がありません。',
+    noAreaDist: '地域を登録すると距離が表示されます',
+    near: '10km以内', approx: d => `約${d}km`,
+    copy: 'コピー', copied: 'コピーしました', share: 'Xで共有',
+    formName: 'トレーナー名', formCode: 'フレンドコード（12桁）', formIcon: 'アイコン（お気に入りのポケモン）',
+    chooseIcon: 'ポケモンを選ぶ', iconNone: 'アイコンを外す', formTeam: 'チーム', teamNone: '未選択',
+    formLevel: `トレーナーレベル（1〜${LEVEL_MAX}）`, formPurpose: '目的', formMsg: 'ひとこと',
+    formArea: '地域', areaMissing: '上の「あなたの地域」を設定してください。',
+    submit: '投稿する', update: '更新する', cancel: 'キャンセル', sending: '送信中…',
+    posted: '投稿しました！Xでシェアして仲間を集めよう。', updated: '更新しました。',
+    mineNone: 'このブラウザから投稿した募集はありません。', mineGone: '投稿が見つかりませんでした（期限切れまたは削除済み）。',
+    active: '掲載中', inactive: '非掲載', activate: '掲載を再開', deactivate: '掲載を停止',
+    activeHint: '非掲載中は掲示板に表示されません。投稿は30日間更新がないと自動で削除されます。',
+    edit: '編集', del: '削除', delConfirm: 'この投稿を削除しますか？', deleted: '削除しました。',
+    searchPh: '名前・図鑑番号で検索（例: ピカチュウ / 25）', close: '閉じる',
+    disclaimer: '本サイトは非公式のファンサイトであり、株式会社ポケモン・Niantic等とは一切関係ありません。フレンドコードの公開は自己責任でお願いします。',
+    privacy: 'プライバシーポリシー', contact: 'お問い合わせ',
+    teams: { mystic: 'ミスティック', valor: 'ヴァーラー', instinct: 'インスティンクト' },
+    purposes: { gift: 'ギフト交換', raid: 'リモートレイド', trade: 'ポケモン交換', pvp: '対戦', local: '近所の友達' },
+    errors: {
+      trainer_name: 'トレーナー名を入力してください。', friend_code: 'フレンドコードは12桁の数字で入力してください。',
+      level: `レベルは1〜${LEVEL_MAX}で入力してください。`, region_code: '地域を設定してください。', location: '地域を設定してください。',
+      rate_limited: '連続投稿はできません。10分ほど時間をおいてください。', generic: 'エラーが発生しました。時間をおいて再度お試しください。',
+    },
+    tweet: p => `ポケモンGOのフレンド募集中！\n👤 ${p.name}${p.lv}\n📍 ${p.area}\n🔢 ${p.code}${p.msg}`,
+    tags: 'ポケモンGO,ポケモンGOフレンド募集',
+  },
+  en: {
+    title: 'Pokémon GO Friend Board',
+    sub: 'Swap friend codes with trainers. Your approximate distance is shown automatically.',
+    myArea: 'Your area', useGps: 'Use my location', notSet: 'Not set', selectArea: '— Select area —',
+    japan: 'Japan', world: 'Other countries',
+    areaHint: 'Used for distances and posts. Your location is rounded to about 10 km; your exact position is never shared.',
+    gpsFail: 'Could not get your location. Please pick from the list.', gpsBusy: 'Locating…',
+    tabBoard: 'Board', tabPost: 'Post', tabMine: 'My post',
+    all: 'All', sortNew: 'Newest', sortNear: 'Nearest',
+    loading: 'Loading…', loadFail: 'Failed to load.', empty: 'No posts yet.',
+    noAreaDist: 'Set your area to see distances',
+    near: 'Within 10 km', approx: d => `~${d} km`,
+    copy: 'Copy', copied: 'Copied', share: 'Share on X',
+    formName: 'Trainer name', formCode: 'Friend code (12 digits)', formIcon: 'Icon (favorite Pokémon)',
+    chooseIcon: 'Choose Pokémon', iconNone: 'Remove icon', formTeam: 'Team', teamNone: 'None',
+    formLevel: `Trainer level (1–${LEVEL_MAX})`, formPurpose: 'Looking for', formMsg: 'Message',
+    formArea: 'Area', areaMissing: 'Please set "Your area" above.',
+    submit: 'Post', update: 'Update', cancel: 'Cancel', sending: 'Sending…',
+    posted: 'Posted! Share on X to find more friends.', updated: 'Updated.',
+    mineNone: 'You have no post from this browser.', mineGone: 'Post not found (expired or deleted).',
+    active: 'Listed', inactive: 'Hidden', activate: 'List again', deactivate: 'Hide post',
+    activeHint: 'Hidden posts are not shown on the board. Posts are removed after 30 days without updates.',
+    edit: 'Edit', del: 'Delete', delConfirm: 'Delete this post?', deleted: 'Deleted.',
+    searchPh: 'Search by name or No. (e.g. Pikachu / 25)', close: 'Close',
+    disclaimer: 'This is an unofficial fan site and is not affiliated with The Pokémon Company or Niantic. Share your friend code at your own risk.',
+    privacy: 'Privacy policy', contact: 'Contact',
+    teams: { mystic: 'Mystic', valor: 'Valor', instinct: 'Instinct' },
+    purposes: { gift: 'Gifts', raid: 'Remote raids', trade: 'Trades', pvp: 'Battles', local: 'Local friends' },
+    errors: {
+      trainer_name: 'Please enter a trainer name.', friend_code: 'Friend code must be 12 digits.',
+      level: `Level must be 1–${LEVEL_MAX}.`, region_code: 'Please set your area.', location: 'Please set your area.',
+      rate_limited: 'Too many posts. Please wait about 10 minutes.', generic: 'Something went wrong. Please try again later.',
+    },
+    tweet: p => `Looking for Pokémon GO friends!\n👤 ${p.name}${p.lv}\n📍 ${p.area}\n🔢 ${p.code}${p.msg}`,
+    tags: 'PokemonGO,PokemonGOFriends',
+  },
+  'zh-CN': {
+    title: 'Pokémon GO 好友招募板',
+    sub: '交换好友代码，自动显示与你的大致距离。',
+    myArea: '你的地区', useGps: '使用当前位置', notSet: '未设置', selectArea: '— 选择地区 —',
+    japan: '日本', world: '其他国家/地区',
+    areaHint: '用于计算距离和发布。位置会四舍五入到约10公里，不会公开精确位置。',
+    gpsFail: '无法获取当前位置，请从列表中选择。', gpsBusy: '定位中…',
+    tabBoard: '招募板', tabPost: '发布', tabMine: '我的发布',
+    all: '全部', sortNew: '最新', sortNear: '最近',
+    loading: '加载中…', loadFail: '加载失败。', empty: '还没有发布。',
+    noAreaDist: '设置地区后显示距离',
+    near: '10公里以内', approx: d => `约${d}公里`,
+    copy: '复制', copied: '已复制', share: '分享到 X',
+    formName: '训练家名称', formCode: '好友代码（12位）', formIcon: '头像（喜欢的宝可梦）',
+    chooseIcon: '选择宝可梦', iconNone: '移除头像', formTeam: '队伍', teamNone: '未选择',
+    formLevel: `训练家等级（1–${LEVEL_MAX}）`, formPurpose: '目的', formMsg: '留言',
+    formArea: '地区', areaMissing: '请先设置上方的“你的地区”。',
+    submit: '发布', update: '更新', cancel: '取消', sending: '发送中…',
+    posted: '发布成功！分享到 X 寻找更多好友吧。', updated: '已更新。',
+    mineNone: '此浏览器没有发布记录。', mineGone: '未找到发布（已过期或已删除）。',
+    active: '展示中', inactive: '已隐藏', activate: '重新展示', deactivate: '停止展示',
+    activeHint: '隐藏后不会显示在招募板上。30天未更新的发布会被自动删除。',
+    edit: '编辑', del: '删除', delConfirm: '确定删除此发布吗？', deleted: '已删除。',
+    searchPh: '按名称或图鉴编号搜索（例: Pikachu / 25）', close: '关闭',
+    disclaimer: '本站为非官方粉丝网站，与 The Pokémon Company、Niantic 无任何关系。公开好友代码请自行承担风险。',
+    privacy: '隐私政策', contact: '联系我们',
+    teams: { mystic: '智慧队', valor: '勇气队', instinct: '直觉队' },
+    purposes: { gift: '交换礼物', raid: '远程团体战', trade: '交换宝可梦', pvp: '对战', local: '附近好友' },
+    errors: {
+      trainer_name: '请输入训练家名称。', friend_code: '好友代码必须为12位数字。',
+      level: `等级需为1–${LEVEL_MAX}。`, region_code: '请设置地区。', location: '请设置地区。',
+      rate_limited: '发布过于频繁，请等待约10分钟。', generic: '发生错误，请稍后再试。',
+    },
+    tweet: p => `招募 Pokémon GO 好友！\n👤 ${p.name}${p.lv}\n📍 ${p.area}\n🔢 ${p.code}${p.msg}`,
+    tags: 'PokemonGO,PokemonGOFriends',
+  },
+  'zh-TW': {
+    title: 'Pokémon GO 好友招募板',
+    sub: '交換好友代碼，自動顯示與你的大約距離。',
+    myArea: '你的地區', useGps: '使用目前位置', notSet: '未設定', selectArea: '— 選擇地區 —',
+    japan: '日本', world: '其他國家/地區',
+    areaHint: '用於計算距離與發文。位置會四捨五入到約10公里，不會公開精確位置。',
+    gpsFail: '無法取得目前位置，請從清單中選擇。', gpsBusy: '定位中…',
+    tabBoard: '招募板', tabPost: '發文', tabMine: '我的發文',
+    all: '全部', sortNew: '最新', sortNear: '最近',
+    loading: '載入中…', loadFail: '載入失敗。', empty: '還沒有發文。',
+    noAreaDist: '設定地區後顯示距離',
+    near: '10公里以內', approx: d => `約${d}公里`,
+    copy: '複製', copied: '已複製', share: '分享到 X',
+    formName: '訓練家名稱', formCode: '好友代碼（12位）', formIcon: '頭像（喜歡的寶可夢）',
+    chooseIcon: '選擇寶可夢', iconNone: '移除頭像', formTeam: '隊伍', teamNone: '未選擇',
+    formLevel: `訓練家等級（1–${LEVEL_MAX}）`, formPurpose: '目的', formMsg: '留言',
+    formArea: '地區', areaMissing: '請先設定上方的「你的地區」。',
+    submit: '發文', update: '更新', cancel: '取消', sending: '傳送中…',
+    posted: '發文成功！分享到 X 尋找更多好友吧。', updated: '已更新。',
+    mineNone: '此瀏覽器沒有發文紀錄。', mineGone: '找不到發文（已過期或已刪除）。',
+    active: '刊登中', inactive: '已隱藏', activate: '重新刊登', deactivate: '停止刊登',
+    activeHint: '隱藏後不會顯示在招募板上。30天未更新的發文會自動刪除。',
+    edit: '編輯', del: '刪除', delConfirm: '確定刪除此發文嗎？', deleted: '已刪除。',
+    searchPh: '依名稱或圖鑑編號搜尋（例: Pikachu / 25）', close: '關閉',
+    disclaimer: '本站為非官方粉絲網站，與 The Pokémon Company、Niantic 無任何關係。公開好友代碼請自行承擔風險。',
+    privacy: '隱私權政策', contact: '聯絡我們',
+    teams: { mystic: '智慧隊', valor: '勇氣隊', instinct: '直覺隊' },
+    purposes: { gift: '交換禮物', raid: '遠端團體戰', trade: '交換寶可夢', pvp: '對戰', local: '附近好友' },
+    errors: {
+      trainer_name: '請輸入訓練家名稱。', friend_code: '好友代碼必須為12位數字。',
+      level: `等級需為1–${LEVEL_MAX}。`, region_code: '請設定地區。', location: '請設定地區。',
+      rate_limited: '發文過於頻繁，請等待約10分鐘。', generic: '發生錯誤，請稍後再試。',
+    },
+    tweet: p => `招募 Pokémon GO 好友！\n👤 ${p.name}${p.lv}\n📍 ${p.area}\n🔢 ${p.code}${p.msg}`,
+    tags: 'PokemonGO,PokemonGOFriends',
+  },
+  ko: {
+    title: '포켓몬 GO 친구 모집 게시판',
+    sub: '친구 코드를 교환하세요. 나와의 대략적인 거리가 자동으로 표시됩니다.',
+    myArea: '내 지역', useGps: '현재 위치 사용', notSet: '미설정', selectArea: '— 지역 선택 —',
+    japan: '일본', world: '해외',
+    areaHint: '거리 계산과 게시에 사용됩니다. 위치는 약 10km 단위로 반올림되며 정확한 위치는 공개되지 않습니다.',
+    gpsFail: '현재 위치를 가져올 수 없습니다. 목록에서 선택해 주세요.', gpsBusy: '위치 확인 중…',
+    tabBoard: '게시판', tabPost: '글쓰기', tabMine: '내 게시글',
+    all: '전체', sortNew: '최신순', sortNear: '가까운 순',
+    loading: '불러오는 중…', loadFail: '불러오지 못했습니다.', empty: '아직 게시글이 없습니다.',
+    noAreaDist: '지역을 설정하면 거리가 표시됩니다',
+    near: '10km 이내', approx: d => `약 ${d}km`,
+    copy: '복사', copied: '복사됨', share: 'X에 공유',
+    formName: '트레이너 이름', formCode: '친구 코드 (12자리)', formIcon: '아이콘 (좋아하는 포켓몬)',
+    chooseIcon: '포켓몬 선택', iconNone: '아이콘 제거', formTeam: '팀', teamNone: '선택 안 함',
+    formLevel: `트레이너 레벨 (1–${LEVEL_MAX})`, formPurpose: '목적', formMsg: '한마디',
+    formArea: '지역', areaMissing: '위의 "내 지역"을 설정해 주세요.',
+    submit: '게시하기', update: '수정하기', cancel: '취소', sending: '전송 중…',
+    posted: '게시했습니다! X에 공유해서 친구를 모아 보세요.', updated: '수정했습니다.',
+    mineNone: '이 브라우저에서 작성한 게시글이 없습니다.', mineGone: '게시글을 찾을 수 없습니다 (만료 또는 삭제됨).',
+    active: '게시 중', inactive: '비공개', activate: '게시 재개', deactivate: '게시 중지',
+    activeHint: '비공개 상태에서는 게시판에 표시되지 않습니다. 30일간 업데이트가 없으면 자동 삭제됩니다.',
+    edit: '수정', del: '삭제', delConfirm: '이 게시글을 삭제할까요?', deleted: '삭제했습니다.',
+    searchPh: '이름 또는 도감 번호로 검색 (예: Pikachu / 25)', close: '닫기',
+    disclaimer: '본 사이트는 비공식 팬 사이트이며 The Pokémon Company, Niantic과 관련이 없습니다. 친구 코드 공개는 본인 책임입니다.',
+    privacy: '개인정보 처리방침', contact: '문의',
+    teams: { mystic: '미스틱', valor: '발러', instinct: '인스팅트' },
+    purposes: { gift: '선물 교환', raid: '원격 레이드', trade: '포켓몬 교환', pvp: '배틀', local: '동네 친구' },
+    errors: {
+      trainer_name: '트레이너 이름을 입력해 주세요.', friend_code: '친구 코드는 12자리 숫자여야 합니다.',
+      level: `레벨은 1–${LEVEL_MAX}이어야 합니다.`, region_code: '지역을 설정해 주세요.', location: '지역을 설정해 주세요.',
+      rate_limited: '연속 게시는 할 수 없습니다. 10분 정도 기다려 주세요.', generic: '오류가 발생했습니다. 잠시 후 다시 시도해 주세요.',
+    },
+    tweet: p => `포켓몬 GO 친구 모집 중!\n👤 ${p.name}${p.lv}\n📍 ${p.area}\n🔢 ${p.code}${p.msg}`,
+    tags: '포켓몬GO,PokemonGOFriends',
+  },
+};
+
+/* ===================== 地域データ ===================== */
+// 都道府県 [ISO 3166-2 番号, 日本語, English, 한국어, 県庁所在地の緯度, 経度]（中国語表示は漢字表記を使用）
+const PREFS = [
+  ['01','北海道','Hokkaido','홋카이도',43.06,141.35],['02','青森県','Aomori','아오모리현',40.82,140.74],
+  ['03','岩手県','Iwate','이와테현',39.70,141.15],['04','宮城県','Miyagi','미야기현',38.27,140.87],
+  ['05','秋田県','Akita','아키타현',39.72,140.10],['06','山形県','Yamagata','야마가타현',38.24,140.36],
+  ['07','福島県','Fukushima','후쿠시마현',37.75,140.47],['08','茨城県','Ibaraki','이바라키현',36.34,140.45],
+  ['09','栃木県','Tochigi','도치기현',36.57,139.88],['10','群馬県','Gunma','군마현',36.39,139.06],
+  ['11','埼玉県','Saitama','사이타마현',35.86,139.65],['12','千葉県','Chiba','지바현',35.61,140.12],
+  ['13','東京都','Tokyo','도쿄도',35.69,139.69],['14','神奈川県','Kanagawa','가나가와현',35.45,139.64],
+  ['15','新潟県','Niigata','니가타현',37.90,139.02],['16','富山県','Toyama','도야마현',36.70,137.21],
+  ['17','石川県','Ishikawa','이시카와현',36.59,136.63],['18','福井県','Fukui','후쿠이현',36.07,136.22],
+  ['19','山梨県','Yamanashi','야마나시현',35.66,138.57],['20','長野県','Nagano','나가노현',36.65,138.18],
+  ['21','岐阜県','Gifu','기후현',35.39,136.72],['22','静岡県','Shizuoka','시즈오카현',34.98,138.38],
+  ['23','愛知県','Aichi','아이치현',35.18,136.91],['24','三重県','Mie','미에현',34.73,136.51],
+  ['25','滋賀県','Shiga','시가현',35.00,135.87],['26','京都府','Kyoto','교토부',35.02,135.76],
+  ['27','大阪府','Osaka','오사카부',34.69,135.52],['28','兵庫県','Hyogo','효고현',34.69,135.18],
+  ['29','奈良県','Nara','나라현',34.69,135.83],['30','和歌山県','Wakayama','와카야마현',34.23,135.17],
+  ['31','鳥取県','Tottori','돗토리현',35.50,134.24],['32','島根県','Shimane','시마네현',35.47,133.05],
+  ['33','岡山県','Okayama','오카야마현',34.66,133.93],['34','広島県','Hiroshima','히로시마현',34.40,132.46],
+  ['35','山口県','Yamaguchi','야마구치현',34.19,131.47],['36','徳島県','Tokushima','도쿠시마현',34.07,134.56],
+  ['37','香川県','Kagawa','가가와현',34.34,134.04],['38','愛媛県','Ehime','에히메현',33.84,132.77],
+  ['39','高知県','Kochi','고치현',33.56,133.53],['40','福岡県','Fukuoka','후쿠오카현',33.61,130.42],
+  ['41','佐賀県','Saga','사가현',33.25,130.30],['42','長崎県','Nagasaki','나가사키현',32.74,129.87],
+  ['43','熊本県','Kumamoto','구마모토현',32.79,130.74],['44','大分県','Oita','오이타현',33.24,131.61],
+  ['45','宮崎県','Miyazaki','미야자키현',31.91,131.42],['46','鹿児島県','Kagoshima','가고시마현',31.56,130.56],
+  ['47','沖縄県','Okinawa','오키나와현',26.21,127.68],
+];
+// 国 [ISO 3166-1 alpha-2, 代表点の緯度, 経度]（国名は Intl.DisplayNames で各言語に変換）
+const COUNTRIES = [
+  ['KR',37.57,126.98],['TW',25.03,121.56],['CN',34.0,113.0],['HK',22.32,114.17],['MO',22.20,113.55],
+  ['SG',1.35,103.82],['TH',13.76,100.50],['VN',16.0,107.0],['PH',14.60,120.98],['MY',3.14,101.69],
+  ['ID',-6.21,106.85],['IN',22.0,79.0],['AU',-31.0,147.0],['NZ',-40.9,174.9],['US',38.0,-97.0],
+  ['CA',45.4,-75.7],['MX',19.43,-99.13],['BR',-20.0,-46.0],['AR',-34.6,-58.4],['CL',-33.45,-70.67],
+  ['CO',4.71,-74.07],['PE',-12.05,-77.04],['GB',52.5,-1.5],['IE',53.35,-6.26],['FR',46.6,2.4],
+  ['DE',51.2,10.4],['IT',42.8,12.5],['ES',40.4,-3.7],['PT',39.4,-8.2],['NL',52.1,5.3],
+  ['BE',50.85,4.35],['CH',46.8,8.2],['AT',47.5,14.5],['SE',59.3,18.1],['NO',59.9,10.75],
+  ['DK',55.7,12.6],['FI',60.2,24.9],['PL',52.1,19.4],['CZ',50.08,14.44],['HU',47.5,19.04],
+  ['GR',37.98,23.73],['TR',39.9,32.9],['RU',55.75,37.62],['UA',50.45,30.52],['IL',32.08,34.78],
+  ['AE',25.2,55.27],['SA',24.7,46.7],['EG',30.04,31.24],['ZA',-26.2,28.0],['NG',6.5,3.4],['KE',-1.29,36.82],
+];
+const REGIONS = new Map();
+PREFS.forEach(([n, ja, en, ko, lat, lng]) => REGIONS.set('JP-' + n, { ja, en, ko, lat, lng, jp: true }));
+COUNTRIES.forEach(([c, lat, lng]) => REGIONS.set(c, { lat, lng, jp: false }));
+
+/* ===================== 状態・保存 ===================== */
+const store = {
+  get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } },
+  set(k, v) { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, JSON.stringify(v)); } catch {} },
+};
+const state = {
+  lang: 'ja',
+  me: store.get('pogo_me'),          // { region, lat, lng }
+  mine: store.get('pogo_mine'),      // { id, token }
+  posts: [], sort: 'new', purpose: '', loaded: false,
+  iconId: null, editing: false,
+  pokemon: null,                     // [[ja, en], ...]  index = 図鑑番号 - 1
+};
+
+function detectLang() {
+  const q = new URLSearchParams(location.search).get('lang');
+  const saved = store.get('pogo_lang');
+  for (const c of [q, saved, ...(navigator.languages || [navigator.language])]) {
+    if (!c) continue;
+    if (I18N[c]) return c;
+    const l = c.toLowerCase();
+    if (l.startsWith('zh')) return /tw|hk|mo|hant/.test(l) ? 'zh-TW' : 'zh-CN';
+    const base = l.slice(0, 2);
+    if (I18N[base]) return base;
+  }
+  return 'ja';
+}
+const T = () => I18N[state.lang];
+const $ = id => document.getElementById(id);
+function el(tag, attrs = {}, ...children) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === 'class') e.className = v;
+    else if (k.startsWith('on')) e.addEventListener(k.slice(2), v);
+    else if (v != null && v !== false) e.setAttribute(k, v === true ? '' : v);
+  }
+  for (const c of children.flat()) if (c != null && c !== false) e.append(c);
+  return e;
+}
+
+/* ===================== 地域・距離 ===================== */
+let countryNames = null;
+function regionName(code) {
+  const r = REGIONS.get(code);
+  if (!r) return code || '';
+  if (r.jp) {
+    if (state.lang === 'ko') return r.ko;
+    if (state.lang === 'en') return r.en;
+    return r.ja; // ja / zh は漢字表記
+  }
+  try { return countryNames.of(code); } catch { return code; }
+}
+function nearestRegion(lat, lng) {
+  let best = null, bestD = Infinity;
+  for (const [code, r] of REGIONS) {
+    const d = haversine(lat, lng, r.lat, r.lng);
+    if (d < bestD) { bestD = d; best = code; }
+  }
+  return best;
+}
+function haversine(lat1, lng1, lat2, lng2) {
+  const R = 6371, toRad = x => x * Math.PI / 180;
+  const dLat = toRad(lat2 - lat1), dLng = toRad(lng2 - lng1);
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(a));
+}
+// 座標は約10km単位に丸めてあるため、距離もざっくりした目安で表示する
+function distLabel(km) {
+  if (km <= 10) return T().near;
+  const step = km < 100 ? 10 : km < 1000 ? 50 : 100;
+  return T().approx((Math.round(km / step) * step).toLocaleString(state.lang));
+}
+const round1 = v => Math.round(v * 10) / 10;
+function distanceTo(p) {
+  if (!state.me) return null;
+  return haversine(state.me.lat, state.me.lng, p.lat, p.lng);
+}
+
+function setMe(me) {
+  state.me = me;
+  store.set('pogo_me', me);
+  renderArea();
+  renderBoard();
+  renderFormArea();
+}
+
+function renderArea() {
+  $('area-label').textContent = state.me ? regionName(state.me.region) : T().notSet;
+  const sel = $('area-select');
+  sel.textContent = '';
+  sel.append(el('option', { value: '' }, T().selectArea));
+  const jp = el('optgroup', { label: T().japan });
+  PREFS.forEach(([n]) => jp.append(el('option', { value: 'JP-' + n }, regionName('JP-' + n))));
+  const world = el('optgroup', { label: T().world });
+  COUNTRIES.map(([c]) => [c, regionName(c)])
+    .sort((a, b) => a[1].localeCompare(b[1], state.lang))
+    .forEach(([c, name]) => world.append(el('option', { value: c }, name)));
+  sel.append(jp, world);
+  sel.value = state.me ? state.me.region : '';
+}
+
+$('area-select').addEventListener('change', e => {
+  const code = e.target.value;
+  if (!code) return;
+  const r = REGIONS.get(code);
+  setMe({ region: code, lat: r.lat, lng: r.lng });
+});
+$('btn-gps').addEventListener('click', () => {
+  const btn = $('btn-gps');
+  if (!navigator.geolocation) return alert(T().gpsFail);
+  btn.disabled = true;
+  btn.textContent = T().gpsBusy;
+  navigator.geolocation.getCurrentPosition(pos => {
+    const lat = round1(pos.coords.latitude), lng = round1(pos.coords.longitude);
+    setMe({ region: nearestRegion(lat, lng), lat, lng });
+    btn.disabled = false; btn.textContent = T().useGps;
+  }, () => {
+    btn.disabled = false; btn.textContent = T().useGps;
+    alert(T().gpsFail);
+  }, { enableHighAccuracy: false, timeout: 10000, maximumAge: 600000 });
+});
+
+/* ===================== 掲示板 ===================== */
+const PURPOSES = ['gift', 'raid', 'trade', 'pvp', 'local'];
+const TEAMS = ['mystic', 'valor', 'instinct'];
+
+const fmtCode = c => String(c).replace(/(\d{4})(?=\d)/g, '$1 ');
+
+function timeAgo(sec) {
+  const rtf = new Intl.RelativeTimeFormat(state.lang, { numeric: 'auto' });
+  const diff = sec - Date.now() / 1000;
+  const abs = Math.abs(diff);
+  if (abs < 60) return rtf.format(0, 'second');
+  if (abs < 3600) return rtf.format(Math.round(diff / 60), 'minute');
+  if (abs < 86400) return rtf.format(Math.round(diff / 3600), 'hour');
+  return rtf.format(Math.round(diff / 86400), 'day');
+}
+
+function avatar(iconId, team) {
+  const box = el('div', { class: 'avatar' + (team ? ' ' + team : '') });
+  if (iconId) {
+    const img = el('img', { src: SPRITE(iconId), alt: pokemonName(iconId) || '', loading: 'lazy', width: 64, height: 64 });
+    img.addEventListener('error', () => { if (!img.dataset.fb) { img.dataset.fb = 1; img.src = ARTWORK(iconId); } }, { once: false });
+    box.append(img);
+  } else {
+    box.append(el('div', { class: 'ball' }));
+  }
+  return box;
+}
+
+function tweetUrl(p) {
+  const t = T();
+  const msg = p.message ? '\n💬 ' + (p.message.length > 60 ? p.message.slice(0, 60) + '…' : p.message) : '';
+  const text = t.tweet({
+    name: p.trainer_name,
+    lv: p.level ? ` (Lv.${p.level})` : '',
+    area: regionName(p.region_code),
+    code: fmtCode(p.friend_code),
+    msg,
+  });
+  const q = new URLSearchParams({ text, url: PAGE_URL + '?lang=' + state.lang, hashtags: t.tags });
+  return 'https://twitter.com/intent/tweet?' + q.toString();
+}
+
+function postCard(p, opts = {}) {
+  const t = T();
+  const d = distanceTo(p);
+  const copyBtn = el('button', { class: 'btn', type: 'button' }, t.copy);
+  copyBtn.addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(p.friend_code); } catch {
+      const ta = el('textarea', {}, p.friend_code); document.body.append(ta); ta.select(); document.execCommand('copy'); ta.remove();
+    }
+    copyBtn.textContent = t.copied;
+    setTimeout(() => (copyBtn.textContent = t.copy), 1500);
+  });
+  const purposes = (p.purpose || '').split(',').filter(Boolean);
+
+  return el('article', { class: 'card post' },
+    avatar(p.icon_id, p.team),
+    el('div', { class: 'post-body' },
+      el('div', { class: 'post-head' },
+        el('span', { class: 'post-name' }, p.trainer_name),
+        p.level ? el('span', { class: 'lv' }, 'Lv.' + p.level) : null,
+        p.team ? el('span', { class: 'team ' + p.team }, t.teams[p.team]) : null,
+        opts.badge ? el('span', { class: 'badge ' + (p.is_active ? 'on' : 'off') }, p.is_active ? t.active : t.inactive) : null,
+      ),
+      el('div', { class: 'meta' },
+        '📍 ' + regionName(p.region_code) + ' · ',
+        d != null ? el('span', { class: 'dist' }, distLabel(d)) : el('span', {}, t.noAreaDist),
+        ' · ' + timeAgo(p.updated_at),
+      ),
+      purposes.length ? el('div', { class: 'tags' }, purposes.map(k => el('span', { class: 'tag' }, t.purposes[k] || k))) : null,
+      p.message ? el('p', { class: 'msg' }, p.message) : null,
+      el('div', { class: 'code-row' },
+        el('span', { class: 'code' }, fmtCode(p.friend_code)),
+        copyBtn,
+        el('a', { class: 'btn x', href: tweetUrl(p), target: '_blank', rel: 'noopener' }, t.share),
+      ),
+    ),
+  );
+}
+
+function renderFilters() {
+  const t = T();
+  const box = $('filters');
+  box.textContent = '';
+  const chip = (key, label) => el('button', {
+    class: 'chip', type: 'button', 'aria-pressed': String(state.purpose === key),
+    onclick: () => { state.purpose = key; renderFilters(); renderBoard(); },
+  }, label);
+  box.append(chip('', t.all), ...PURPOSES.map(k => chip(k, t.purposes[k])));
+  const sort = el('select', { class: 'input sort', 'aria-label': 'Sort', style: 'width:auto;padding:4px 8px;font-size:12px' },
+    el('option', { value: 'new' }, t.sortNew),
+    el('option', { value: 'near' }, t.sortNear),
+  );
+  sort.value = state.sort;
+  sort.addEventListener('change', () => { state.sort = sort.value; renderBoard(); });
+  box.append(sort);
+}
+
+function renderBoard() {
+  const t = T();
+  const list = $('board-list');
+  const status = $('board-status');
+  if (!state.loaded) return;
+  let posts = state.posts.filter(p => !state.purpose || (p.purpose || '').split(',').includes(state.purpose));
+  if (state.sort === 'near' && state.me) posts = [...posts].sort((a, b) => distanceTo(a) - distanceTo(b));
+  list.textContent = '';
+  status.textContent = posts.length ? '' : t.empty;
+  status.hidden = !!posts.length;
+  posts.forEach(p => list.append(postCard(p)));
+}
+
+async function loadBoard(fresh = false) {
+  const status = $('board-status');
+  status.hidden = false;
+  status.textContent = T().loading;
+  try {
+    const res = await fetch(API + '?limit=200', fresh ? { cache: 'no-store' } : {});
+    if (!res.ok) throw new Error(res.status);
+    state.posts = (await res.json()).posts || [];
+    state.loaded = true;
+    renderBoard();
+  } catch {
+    status.textContent = T().loadFail;
+  }
+}
+
+/* ===================== アイコン選択 ===================== */
+const pokemonName = id => {
+  const row = state.pokemon && state.pokemon[id - 1];
+  if (!row) return '';
+  return state.lang === 'ja' ? row[0] : row[1];
+};
+async function loadPokemon() {
+  if (state.pokemon) return state.pokemon;
+  const res = await fetch('pokemon.json');
+  state.pokemon = await res.json();
+  return state.pokemon;
+}
+const toKatakana = s => s.replace(/[ぁ-ゖ]/g, c => String.fromCharCode(c.charCodeAt(0) + 0x60));
+
+function renderIconGrid() {
+  const q = toKatakana($('icon-q').value.trim()).toLowerCase();
+  const grid = $('icon-grid');
+  grid.textContent = '';
+  const hits = [];
+  for (let i = 0; i < state.pokemon.length && hits.length < 150; i++) {
+    const [ja, en] = state.pokemon[i], id = i + 1;
+    if (!q || ja.includes(q) || en.toLowerCase().includes(q) || String(id) === q.replace(/^0+/, '')) hits.push(id);
+  }
+  hits.forEach(id => {
+    const img = el('img', { src: SPRITE(id), alt: '', loading: 'lazy', width: 64, height: 64 });
+    img.addEventListener('error', () => { if (!img.dataset.fb) { img.dataset.fb = 1; img.src = ARTWORK(id); } });
+    grid.append(el('button', { type: 'button', onclick: () => { setIcon(id); $('icon-dlg').close(); } },
+      img, el('span', {}, pokemonName(id)), el('span', { class: 'no' }, 'No.' + id)));
+  });
+}
+function setIcon(id) {
+  state.iconId = id;
+  const prev = $('f-icon-preview');
+  prev.replaceWith(Object.assign(avatar(id, formTeam()), { id: 'f-icon-preview' }));
+  $('f-icon-name').textContent = id ? `No.${id} ${pokemonName(id)}` : '';
+  $('btn-icon-clear').hidden = !id;
+}
+$('btn-icon').addEventListener('click', async () => {
+  $('icon-q').placeholder = T().searchPh;
+  $('icon-dlg').showModal();
+  await loadPokemon();
+  renderIconGrid();
+  $('icon-q').focus();
+});
+$('btn-icon-clear').addEventListener('click', () => setIcon(null));
+$('icon-q').addEventListener('input', () => state.pokemon && renderIconGrid());
+$('icon-close').addEventListener('click', () => $('icon-dlg').close());
+$('icon-dlg').addEventListener('click', e => { if (e.target === e.currentTarget) e.currentTarget.close(); });
+
+/* ===================== 投稿フォーム ===================== */
+const formTeam = () => (document.querySelector('input[name="team"]:checked') || {}).value || null;
+
+function renderFormChoices() {
+  const t = T();
+  const team = formTeam();
+  const purposes = [...document.querySelectorAll('input[name="purpose"]:checked')].map(i => i.value);
+  const teamBox = $('f-team');
+  teamBox.textContent = '';
+  [['', t.teamNone], ...TEAMS.map(k => [k, t.teams[k]])].forEach(([k, label]) => {
+    const input = el('input', { type: 'radio', name: 'team', value: k, checked: (team || '') === k });
+    input.addEventListener('change', () => setIcon(state.iconId));
+    teamBox.append(el('label', {}, input, label));
+  });
+  const pBox = $('f-purpose');
+  pBox.textContent = '';
+  PURPOSES.forEach(k => pBox.append(el('label', {},
+    el('input', { type: 'checkbox', name: 'purpose', value: k, checked: purposes.includes(k) }), t.purposes[k])));
+}
+function renderFormArea() {
+  $('f-area').textContent = state.me ? '📍 ' + regionName(state.me.region) : T().areaMissing;
+}
+function renderSubmitLabel() {
+  $('btn-submit').textContent = state.editing ? T().update : T().submit;
+  $('btn-cancel-edit').hidden = !state.editing;
+  $('f-code').disabled = state.editing;
+}
+function notice(box, kind, text, extra) {
+  box.className = 'notice ' + kind;
+  box.textContent = text;
+  if (extra) box.append(' ', extra);
+  box.hidden = false;
+}
+
+$('f-code').addEventListener('input', e => {
+  const digits = e.target.value.replace(/\D/g, '').slice(0, 12);
+  e.target.value = fmtCode(digits);
+});
+$('f-msg').addEventListener('input', e => ($('f-msg-count').textContent = e.target.value.length));
+
+function readForm() {
+  const levelRaw = $('f-level').value.trim();
+  return {
+    trainer_name: $('f-name').value.trim(),
+    friend_code: $('f-code').value.replace(/\D/g, ''),
+    team: formTeam(),
+    level: levelRaw === '' ? null : Number(levelRaw),
+    icon_id: state.iconId,
+    purpose: [...document.querySelectorAll('input[name="purpose"]:checked')].map(i => i.value),
+    message: $('f-msg').value.trim(),
+    region_code: state.me && state.me.region,
+    lat: state.me && state.me.lat,
+    lng: state.me && state.me.lng,
+  };
+}
+function checkForm(d) {
+  if (!d.trainer_name) return 'trainer_name';
+  if (!state.editing && !/^\d{12}$/.test(d.friend_code)) return 'friend_code';
+  if (d.level !== null && !(Number.isInteger(d.level) && d.level >= 1 && d.level <= LEVEL_MAX)) return 'level';
+  if (!state.me) return 'region_code';
+  return null;
+}
+
+$('post-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const t = T();
+  const box = $('form-notice');
+  const data = readForm();
+  const bad = checkForm(data);
+  if (bad) return notice(box, 'err', t.errors[bad]);
+
+  const btn = $('btn-submit');
+  btn.disabled = true;
+  btn.textContent = t.sending;
+  try {
+    let res;
+    if (state.editing && state.mine) {
+      delete data.friend_code;
+      res = await fetch(`${API}/${state.mine.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + state.mine.token },
+        body: JSON.stringify(data),
+      });
+    } else {
+      res = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+    }
+    const body = await res.json().catch(() => ({}));
+    if (!res.ok) return notice(box, 'err', t.errors[body.error] || t.errors.generic);
+
+    if (!state.editing) {
+      state.mine = { id: body.id, token: body.token };
+      store.set('pogo_mine', state.mine);
+    }
+    const wasEditing = state.editing;
+    state.editing = false;
+    renderSubmitLabel();
+    box.hidden = true;
+    await loadBoard(true);
+    switchTab('mine');
+    await renderMine(wasEditing ? t.updated : t.posted);
+  } catch {
+    notice(box, 'err', t.errors.generic);
+  } finally {
+    btn.disabled = false;
+    renderSubmitLabel();
+  }
+});
+$('btn-cancel-edit').addEventListener('click', () => {
+  state.editing = false;
+  renderSubmitLabel();
+  switchTab('mine');
+});
+
+function fillForm(p) {
+  $('f-name').value = p.trainer_name;
+  $('f-code').value = fmtCode(p.friend_code);
+  $('f-level').value = p.level || '';
+  $('f-msg').value = p.message || '';
+  $('f-msg-count').textContent = (p.message || '').length;
+  document.querySelectorAll('input[name="team"]').forEach(i => (i.checked = i.value === (p.team || '')));
+  const ps = (p.purpose || '').split(',');
+  document.querySelectorAll('input[name="purpose"]').forEach(i => (i.checked = ps.includes(i.value)));
+  setIcon(p.icon_id);
+}
+
+/* ===================== マイ投稿 ===================== */
+async function mineRequest(method, body) {
+  return fetch(`${API}/${state.mine.id}`, {
+    method,
+    cache: 'no-store',
+    headers: { Authorization: 'Bearer ' + state.mine.token, ...(body ? { 'Content-Type': 'application/json' } : {}) },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+}
+
+async function renderMine(message) {
+  const t = T();
+  const wrap = $('mine-body');
+  const box = $('mine-notice');
+  box.hidden = true;
+  wrap.textContent = '';
+  if (message) notice(box, 'ok', message);
+  if (!state.mine) { wrap.append(el('p', { class: 'card muted' }, t.mineNone)); return; }
+
+  wrap.append(el('p', { class: 'muted', style: 'text-align:center;padding:12px' }, t.loading));
+  let post;
+  try {
+    const res = await mineRequest('GET');
+    if (res.status === 404 || res.status === 403) {
+      state.mine = null; store.set('pogo_mine', null);
+      wrap.textContent = '';
+      wrap.append(el('p', { class: 'card muted' }, t.mineGone));
+      return;
+    }
+    if (!res.ok) throw new Error();
+    post = (await res.json()).post;
+  } catch {
+    wrap.textContent = '';
+    return notice(box, 'err', t.errors.generic);
+  }
+
+  wrap.textContent = '';
+  wrap.append(postCard(post, { badge: true }));
+
+  const toggle = el('button', { class: 'btn primary', type: 'button' }, post.is_active ? t.deactivate : t.activate);
+  toggle.addEventListener('click', async () => {
+    toggle.disabled = true;
+    const res = await mineRequest('PATCH', { is_active: !post.is_active }).catch(() => null);
+    if (!res || !res.ok) { toggle.disabled = false; return notice(box, 'err', t.errors.generic); }
+    await loadBoard(true);
+    renderMine();
+  });
+  const edit = el('button', { class: 'btn', type: 'button' }, t.edit);
+  edit.addEventListener('click', () => {
+    state.editing = true;
+    fillForm(post);
+    renderSubmitLabel();
+    $('form-notice').hidden = true;
+    switchTab('post');
+  });
+  const del = el('button', { class: 'btn danger', type: 'button' }, t.del);
+  del.addEventListener('click', async () => {
+    if (!confirm(t.delConfirm)) return;
+    const res = await mineRequest('DELETE').catch(() => null);
+    if (!res || !res.ok) return notice(box, 'err', t.errors.generic);
+    state.mine = null; store.set('pogo_mine', null);
+    await loadBoard(true);
+    renderMine(t.deleted);
+  });
+  wrap.append(el('div', { class: 'card' },
+    el('div', { style: 'display:flex;flex-wrap:wrap;gap:8px' }, toggle, edit, del),
+    el('p', { class: 'muted', style: 'margin-top:8px' }, t.activeHint),
+  ));
+}
+
+/* ===================== タブ・言語 ===================== */
+function switchTab(name) {
+  document.querySelectorAll('[role="tab"]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === name)));
+  ['board', 'post', 'mine'].forEach(n => ($('panel-' + n).hidden = n !== name));
+  if (name === 'mine') renderMine();
+}
+document.querySelectorAll('[role="tab"]').forEach(b => b.addEventListener('click', () => {
+  if (b.dataset.tab !== 'post' && state.editing) { state.editing = false; renderSubmitLabel(); }
+  switchTab(b.dataset.tab);
+}));
+
+function applyLang(lang) {
+  state.lang = lang;
+  store.set('pogo_lang', lang);
+  document.documentElement.lang = lang;
+  $('lang').value = lang;
+  try { countryNames = new Intl.DisplayNames([lang], { type: 'region' }); } catch { countryNames = { of: c => c }; }
+  const t = T();
+  document.title = t.title;
+  document.querySelectorAll('[data-i18n]').forEach(n => (n.textContent = t[n.dataset.i18n]));
+  renderArea();
+  renderFilters();
+  renderFormChoices();
+  renderFormArea();
+  renderSubmitLabel();
+  setIcon(state.iconId);
+  renderBoard();
+  if (!$('panel-mine').hidden) renderMine();
+}
+$('lang').addEventListener('change', e => applyLang(e.target.value));
+
+/* ===================== 初期化 ===================== */
+applyLang(detectLang());
+loadBoard();
+// アイコン名表示のため名前データを裏で読み込む（30KB）
+loadPokemon().then(() => { setIcon(state.iconId); renderBoard(); }).catch(() => {});
+</script>
+</body>
+</html>
